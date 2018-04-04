@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>deepometry.parse &mdash; deepometry 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="deepometry 0.0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> deepometry
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">deepometry</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>deepometry.parse</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for deepometry.parse</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">bioformats.formatreader</span>
+<span class="kn">import</span> <span class="nn">javabridge</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="kn">import</span> <span class="nn">skimage.exposure</span>
+<span class="kn">import</span> <span class="nn">skimage.io</span>
+<span class="kn">import</span> <span class="nn">skimage.util</span>
+
+<span class="n">SUPPORTED_FORMATS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;.cif&quot;</span><span class="p">,</span> <span class="s2">&quot;.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;.tiff&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="parse"><a class="viewcode-back" href="../../api.html#deepometry.parse.parse">[docs]</a><span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prepare a collection of images for training, evaluation, and prediction.</span>
+
+<span class="sd">    .TIF/.TIFF data is expected to be single-channel data with channel information encoded in the filename: e.g.,</span>
+<span class="sd">    ``/.*_Ch[0-9]+.TIF/``.</span>
+
+<span class="sd">    :param paths: List of pathnames to parse.</span>
+<span class="sd">    :param output_directory: Location to exported parsed image data.</span>
+<span class="sd">    :param size: Final dimension ``(size, size)`` of parsed image data.</span>
+<span class="sd">    :param channels: List of channels to export. Use ``None`` to export all available channels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">paths</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;.cif&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+            <span class="n">_parse_cif</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">channels</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;.tiff&quot;</span><span class="p">):</span>
+        <span class="n">_parse_tif</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">channels</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_group</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">channels</span><span class="p">):</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&quot;(.*)Ch&quot;</span>
+
+    <span class="k">if</span> <span class="n">channels</span><span class="p">:</span>
+        <span class="n">pattern</span> <span class="o">+=</span> <span class="s2">&quot;(?:</span><span class="si">{:s}</span><span class="s2">)\.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span> <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">]))</span>
+
+    <span class="n">groups</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="n">md</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">md</span><span class="p">:</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">groups</span><span class="p">[</span><span class="n">group</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="c1"># E.g., {&quot;foo&quot;: [&quot;foo_Ch0.tif&quot;, &quot;foo_Ch3.tif&quot;]}</span>
+    <span class="k">return</span> <span class="n">groups</span>
+
+
+<span class="k">def</span> <span class="nf">_parse_cif</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">channels</span><span class="p">):</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">bioformats</span><span class="o">.</span><span class="n">formatreader</span><span class="o">.</span><span class="n">get_image_reader</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="n">image_count</span> <span class="o">=</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="s2">&quot;getImageCount&quot;</span><span class="p">,</span> <span class="s2">&quot;()I&quot;</span><span class="p">)</span>
+
+    <span class="c1"># TODO: An overflow error occurs when reading image 190663 and above. :(</span>
+    <span class="n">image_count</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">min</span><span class="p">((</span><span class="n">image_count</span><span class="p">,</span> <span class="mi">190662</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">channels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">channel_count</span> <span class="o">=</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">reader</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="s2">&quot;getChannelCount&quot;</span><span class="p">,</span> <span class="s2">&quot;(I)I&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">channels</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">channel_count</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">image_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">image_count</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">series</span><span class="o">=</span><span class="n">image_index</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_directory</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_directory</span><span class="p">)</span>
+
+        <span class="n">parsed_image</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">channel_index</span><span class="p">,</span> <span class="n">channel</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">channels</span><span class="p">):</span>
+            <span class="n">parsed_image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">channel_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rescale</span><span class="p">(</span><span class="n">_resize</span><span class="p">(</span><span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">channel</span><span class="p">],</span> <span class="n">size</span><span class="p">))</span>
+
+        <span class="n">output_pathname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">output_directory</span><span class="p">,</span>
+            <span class="s2">&quot;</span><span class="si">{:s}</span><span class="s2">__</span><span class="si">{:s}</span><span class="s2">.npy&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.cif&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">())</span>
+        <span class="p">)</span>
+
+        <span class="n">numpy</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_pathname</span><span class="p">,</span> <span class="n">parsed_image</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">def</span> <span class="nf">_parse_tif</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">channels</span><span class="p">):</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="n">_group</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span> <span class="n">channels</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">group</span><span class="p">,</span> <span class="n">group_paths</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">parsed_image</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_paths</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">group_paths</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">skimage</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+            <span class="n">parsed_image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rescale</span><span class="p">(</span><span class="n">_resize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">size</span><span class="p">))</span>
+
+        <span class="n">output_pathname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">output_directory</span><span class="p">,</span>
+            <span class="s2">&quot;</span><span class="si">{:s}</span><span class="s2">__</span><span class="si">{:s}</span><span class="s2">.npy&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">group</span><span class="p">,</span>
+                <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">numpy</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_pathname</span><span class="p">,</span> <span class="n">parsed_image</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_rescale</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
+    <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">scoreatpercentile</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">99.5</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">skimage</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">rescale_intensity</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">in_range</span><span class="o">=</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">),</span> <span class="n">out_range</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_resize</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="n">column_adjust</span> <span class="o">=</span> <span class="n">size</span> <span class="o">-</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">column_adjust_start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">column_adjust</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+    <span class="n">column_adjust_end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">column_adjust</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+
+    <span class="n">row_adjust</span> <span class="o">=</span> <span class="n">size</span> <span class="o">-</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">row_adjust_start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">row_adjust</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+    <span class="n">row_adjust_end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">row_adjust</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+
+    <span class="n">resized</span> <span class="o">=</span> <span class="n">skimage</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span>
+        <span class="n">image</span><span class="p">,</span>
+        <span class="p">(</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">minimum</span><span class="p">((</span><span class="n">column_adjust_start</span><span class="p">,</span> <span class="n">column_adjust_end</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))),</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">minimum</span><span class="p">((</span><span class="n">row_adjust_start</span><span class="p">,</span> <span class="n">row_adjust_end</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_pad</span><span class="p">(</span>
+        <span class="n">resized</span><span class="p">,</span>
+        <span class="p">(</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">((</span><span class="n">column_adjust_start</span><span class="p">,</span> <span class="n">column_adjust_end</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="n">numpy</span><span class="o">.</span><span class="n">maximum</span><span class="p">((</span><span class="n">row_adjust_start</span><span class="p">,</span> <span class="n">row_adjust_end</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_pad</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">pad_width</span><span class="p">):</span>
+    <span class="c1"># TODO: More robust background sampling. Ideas:</span>
+    <span class="c1">#   - Sample all 4 corners, discarding outliers (possible artifacts in corner),</span>
+    <span class="c1">#   - Sample masked pixels,</span>
+    <span class="c1">#   - Assuming a bimodal intensity distribution, sample the mean and standard deviation from the background</span>
+    <span class="c1">#     distribution.</span>
+    <span class="n">sample</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:,</span> <span class="o">-</span><span class="mi">10</span><span class="p">:]</span>
+
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">pad_width</span><span class="p">,</span> <span class="n">_pad_normal</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sample</span><span class="p">),</span> <span class="n">std</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_pad_normal</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="n">pad_width</span><span class="p">,</span> <span class="n">iaxis</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pad_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">vector</span><span class="p">[:</span><span class="n">pad_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span> <span class="n">vector</span><span class="p">[:</span><span class="n">pad_width</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pad_width</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">vector</span><span class="p">[</span><span class="o">-</span><span class="n">pad_width</span><span class="p">[</span><span class="mi">1</span><span class="p">]:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span> <span class="n">vector</span><span class="p">[</span><span class="o">-</span><span class="n">pad_width</span><span class="p">[</span><span class="mi">1</span><span class="p">]:]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vector</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Claire McQuin, Minh Doan.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

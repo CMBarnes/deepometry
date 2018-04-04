@@ -1,0 +1,507 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Examples &mdash; deepometry 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="deepometry 0.0.1 documentation" href="index.html"/>
+        <link rel="next" title="Parse CIFs" href="examples/parse_CIF.html"/>
+        <link rel="prev" title="deepometry" href="intro.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> deepometry
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#parse">Parse</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cli">CLI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python">Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notebooks">Notebooks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples/parse_CIF.html">Parse CIFs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/parse_TIF.html">Parse TIFs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fit-evaluate">Fit &amp; Evaluate</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">CLI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Notebooks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples/fit.html">Fit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/evaluate.html">Evaluate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/evaluate.html#Classification-test">Classification test</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#visualize">Visualize</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">CLI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Notebooks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples/extract.html">Extract</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/visualize.html">Visualize</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">deepometry</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Examples</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="parse">
+<h2>Parse<a class="headerlink" href="#parse" title="Permalink to this headline">¶</a></h2>
+<p><em>Parsing CIF files is only supported with Python 2.7!</em></p>
+<p>Before analyzing your images, it is important to preprocess your data and transform it into a format the <code class="docutils literal notranslate"><span class="pre">deepometry</span></code>
+model can use for training, evaluation, and prediction. Parse your data from <code class="docutils literal notranslate"><span class="pre">CIF</span></code> and <code class="docutils literal notranslate"><span class="pre">TIF</span></code> formats into <code class="docutils literal notranslate"><span class="pre">NPY</span></code>
+data with consistent dimensionality and appropriate rescaling.</p>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">deepometry</span> <span class="pre">parse</span></code> subcommand, or the <code class="docutils literal notranslate"><span class="pre">deepometry.parse.parse</span></code> function to preprocess a directory of raw
+image data. Subdirectories of the top-level directory are class labels and subdirectory contents are .CIF or
+.TIF files containing raw data corresponding to that label.</p>
+<p>For the following examples, let’s assume <code class="docutils literal notranslate"><span class="pre">/data/raw/experiment_00</span></code> contains two subdirectories,
+<code class="docutils literal notranslate"><span class="pre">/data/raw/experiment_00/A</span></code> and <code class="docutils literal notranslate"><span class="pre">/data/raw/experiment_00/B</span></code>. Each subdirectory contains a series of 12-channel
+images. We want to resize our images to a consistent shape of 48x48 pixels. Furthermore, we want to extract only three
+channels. (Channels are 0-indexed!) The resized images from each subdirectory will be exported to
+<code class="docutils literal notranslate"><span class="pre">/data/raw/experiment_00/A</span></code> and <code class="docutils literal notranslate"><span class="pre">/data/raw/experiment_00/B</span></code>, respectively.</p>
+<div class="section" id="cli">
+<h3>CLI<a class="headerlink" href="#cli" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">deepometry</span> <span class="n">parse</span>                            \
+    <span class="o">--</span><span class="n">channels</span> <span class="s2">&quot;0,5-6&quot;</span>                      \
+    <span class="o">--</span><span class="n">image</span><span class="o">-</span><span class="n">size</span> <span class="mi">48</span>                         \
+    <span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw</span><span class="o">/</span><span class="n">experiment_00</span><span class="o">/</span>                \
+    <span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">parsed</span><span class="o">/</span><span class="n">experiment_00</span><span class="o">/</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="python">
+<h3>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">deepometry.parse</span>
+
+
+<span class="n">subdirectories</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;/data/raw/experiment_00/*&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">subdirectory</span> <span class="ow">in</span> <span class="n">subdirectories</span><span class="p">:</span>
+    <span class="n">output_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="s1">&#39;/data/parsed/experiment_00&#39;</span><span class="p">,</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">subdirectory</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Append the subdirectory name to the output directory</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create the output subdirectory, if it does not exist.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_directory</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_directory</span><span class="p">)</span>
+
+    <span class="n">deepometry</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+        <span class="n">paths</span><span class="o">=</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subdirectory</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">)),</span>
+        <span class="n">output_directory</span><span class="o">=</span><span class="n">output_directory</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="mi">48</span><span class="p">,</span>
+        <span class="n">channels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="notebooks">
+<h3>Notebooks<a class="headerlink" href="#notebooks" title="Permalink to this headline">¶</a></h3>
+<p>For in-depth examples on pre-processing image data using <code class="docutils literal notranslate"><span class="pre">deepometry</span></code>, check out these examples:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/parse_CIF.html">Parse CIFs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/parse_TIF.html">Parse TIFs</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="fit-evaluate">
+<h2>Fit &amp; Evaluate<a class="headerlink" href="#fit-evaluate" title="Permalink to this headline">¶</a></h2>
+<p>Use parsed data to fit and evaluate a <code class="docutils literal notranslate"><span class="pre">deepometry</span></code> model.</p>
+<p>Data for fitting is expected to be saved as consistently sized NumPy arrays (the <code class="docutils literal notranslate"><span class="pre">deepometry</span> <span class="pre">parse</span></code> subcommand or
+<code class="docutils literal notranslate"><span class="pre">deepometry.parse.parse</span></code> function does this for you automatically). <code class="docutils literal notranslate"><span class="pre">deepometry</span></code> can fit to and evaluate data
+across multiple directories. Subdirectories of the top-level directories are class labels and subdirectory contents are
+.NPY files containing preprocessed image data corresponding to that label.</p>
+<p>For the following examples, let’s assume <code class="docutils literal notranslate"><span class="pre">/data/parsed/experiment_00</span></code>, <code class="docutils literal notranslate"><span class="pre">/data/parsed/experiment_01</span></code> and
+<code class="docutils literal notranslate"><span class="pre">/data/parsed/experiment_02</span></code> each contain two subdirectories, <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>. Each subdirectory contains a series
+of 3-channel images as NPY arrays. Each array is 48x48 pixels.</p>
+<div class="section" id="id1">
+<h3>CLI<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">deepometry</span> <span class="n">fit</span>                            \
+   <span class="o">--</span><span class="n">verbose</span>                              \
+   <span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">parsed</span><span class="o">/</span><span class="n">experiment_00</span>             \
+   <span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">parsed</span><span class="o">/</span><span class="n">experiment_01</span>
+
+<span class="n">deepometry</span> <span class="n">evaluate</span>                       \
+   <span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">parsed</span><span class="o">/</span><span class="n">experiment_02</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Python<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">deepometry.model</span>
+<span class="kn">import</span> <span class="nn">deepometry.utils</span>
+
+
+<span class="c1"># Load training data `x_fit` and labels `y_fit`. Additionally, infer the number of</span>
+<span class="c1"># unique labels `units`.</span>
+<span class="c1">#</span>
+<span class="c1"># `sample=True` performs undersampling to mitigate class imbalance.</span>
+<span class="n">directories</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/data/parsed/experiment_00&#39;</span><span class="p">,</span> <span class="s1">&#39;/data/parsed/experiment_01&#39;</span><span class="p">]</span>
+<span class="n">x_fit</span><span class="p">,</span> <span class="n">y_fit</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="n">deepometry</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">directories</span><span class="p">,</span> <span class="n">sample</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># Instantiate the model.</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">deepometry</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+
+<span class="c1"># Fit the model to the data.</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_fit</span><span class="p">,</span> <span class="n">y_fit</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Evaluate the model&#39;s accuracy.</span>
+<span class="n">x_eval</span><span class="p">,</span> <span class="n">y_eval</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">deepometry</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">load</span><span class="p">([</span><span class="s1">&#39;/data/parsed/experiment_02&#39;</span><span class="p">])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_eval</span><span class="p">,</span> <span class="n">y_eval</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Notebooks<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>For in-depth examples on fitting and evaluating a model using <code class="docutils literal notranslate"><span class="pre">deepometry</span></code>, check out these examples:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/fit.html">Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/evaluate.html">Evaluate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/evaluate.html#Classification-test">Classification test</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="visualize">
+<h2>Visualize<a class="headerlink" href="#visualize" title="Permalink to this headline">¶</a></h2>
+<p>Extract and visualize learned features.</p>
+<p>Explore learned features of a trained model using <code class="docutils literal notranslate"><span class="pre">deepometry</span></code> and TensorBoard. TensorBoard can run on your local
+machine, and allows you to visualize how well classes are grouped together by a trained model. <code class="docutils literal notranslate"><span class="pre">deepometry</span></code> can
+extract and visualize features from data across multiple directories. Subdirectories of the top-level directories are
+class labels and subdirectory contents are .NPY files containing preprocessed image data corresponding to that label.</p>
+<p>For the following examples, let’s assume we have already fit a model to some data. Features will be extracted from
+<code class="docutils literal notranslate"><span class="pre">/data/parsed/experiment_00</span></code>, which contains two subdirectories, <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code>. Each subdirectory contains a series
+of 3-channel images as NPY arrays. Each array is 48x48 pixels.</p>
+<div class="section" id="id4">
+<h3>CLI<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">deepometry</span> <span class="pre">extract</span></code> subcommand will output the location of the features and metadata TSVs. Navigate to the
+address provided by <code class="docutils literal notranslate"><span class="pre">deepometry</span> <span class="pre">visualize</span></code> to view the extracted features on TensorBoard.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">deepometry</span> <span class="n">extract</span>                        \
+   <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">directory</span> <span class="o">./</span><span class="n">extracted</span>         \
+   <span class="o">--</span><span class="n">verbose</span>                              \
+   <span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">parsed</span><span class="o">/</span><span class="n">experiment_00</span>
+
+<span class="n">deepometry</span> <span class="n">visualize</span>                      \
+   <span class="o">--</span><span class="n">metadata</span> <span class="o">./</span><span class="n">extracted</span><span class="o">/</span><span class="n">metadata</span><span class="o">.</span><span class="n">tsv</span>    \
+   <span class="o">./</span><span class="n">extracted</span><span class="o">/</span><span class="n">features</span><span class="o">.</span><span class="n">tsv</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>Python<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span>
+
+<span class="kn">import</span> <span class="nn">deepometry.utils</span>
+<span class="kn">import</span> <span class="nn">deepometry.visualize</span>
+
+
+<span class="c1"># Load training data `x` and labels `labels`. Additionally, infer the number of</span>
+<span class="c1"># unique labels `units`.</span>
+<span class="c1">#</span>
+<span class="c1"># `convert=False` won&#39;t convert class labels to integers, so `labels` is a list of strings.</span>
+<span class="c1"># `sample=256` limits the maximum number of samples per class.</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="n">deepometry</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">load</span><span class="p">([</span><span class="s1">&#39;/data/parsed/experiment_00&#39;</span><span class="p">],</span> <span class="n">convert</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sample</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+
+<span class="c1"># Instantiate a pre-trained model.</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">deepometry</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
+
+<span class="c1"># Extract features from a pre-trained model.</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">standardize</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Export features to a TSV, exclude column headers.</span>
+<span class="n">features_df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">features</span><span class="p">)</span>
+<span class="n">features_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;./extracted/features.tsv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># Export metadata to a TSV, exclude column headers.</span>
+<span class="n">metadata_df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">metadata_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;./extracted/metadata.tsv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># Initialize TensorBoard visualization.</span>
+<span class="n">log_directory</span> <span class="o">=</span> <span class="n">deepometry</span><span class="o">.</span><span class="n">visualize</span><span class="o">.</span><span class="n">make_projection</span><span class="p">(</span>
+   <span class="s1">&#39;./extracted/features.tsv&#39;</span><span class="p">,</span>
+   <span class="n">metadata</span><span class="o">=</span><span class="s1">&#39;./extracted/metadata.tsv&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Run the output of this in a terminal to start TensorBoard.</span>
+<span class="c1"># Navigate to the address provided to view the extracted features.</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;tensorboard --logdir {:s}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log_directory</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h3>Notebooks<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>For in-depth examples on extracting and visualizing learned features using <code class="docutils literal notranslate"><span class="pre">deepometry</span></code>, check out these examples:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/extract.html">Extract</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/visualize.html">Visualize</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="examples/parse_CIF.html" class="btn btn-neutral float-right" title="Parse CIFs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="intro.html" class="btn btn-neutral" title="deepometry" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Claire McQuin, Minh Doan.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

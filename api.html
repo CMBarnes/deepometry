@@ -1,0 +1,499 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API &mdash; deepometry 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="deepometry 0.0.1 documentation" href="index.html"/>
+        <link rel="prev" title="Visualize" href="examples/visualize.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> deepometry
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-deepometry.parse">Parsing and Loading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-deepometry.visualize">Visualization</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">deepometry</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="module-deepometry.parse">
+<span id="parsing-and-loading"></span><h2>Parsing and Loading<a class="headerlink" href="#module-deepometry.parse" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="deepometry.parse.parse">
+<code class="descclassname">deepometry.parse.</code><code class="descname">parse</code><span class="sig-paren">(</span><em>paths</em>, <em>output_directory</em>, <em>size</em>, <em>channels=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepometry/parse.html#parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#deepometry.parse.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare a collection of images for training, evaluation, and prediction.</p>
+<p>.TIF/.TIFF data is expected to be single-channel data with channel information encoded in the filename: e.g.,
+<code class="docutils literal notranslate"><span class="pre">/.*_Ch[0-9]+.TIF/</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>paths</strong> – List of pathnames to parse.</li>
+<li><strong>output_directory</strong> – Location to exported parsed image data.</li>
+<li><strong>size</strong> – Final dimension <code class="docutils literal notranslate"><span class="pre">(size,</span> <span class="pre">size)</span></code> of parsed image data.</li>
+<li><strong>channels</strong> – List of channels to export. Use <code class="docutils literal notranslate"><span class="pre">None</span></code> to export all available channels.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="module-deepometry.utils"></span><dl class="function">
+<dt id="deepometry.utils.load">
+<code class="descclassname">deepometry.utils.</code><code class="descname">load</code><span class="sig-paren">(</span><em>directories</em>, <em>convert=True</em>, <em>sample=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepometry/utils.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#deepometry.utils.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load image and label data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>directories</strong> – List of directories. Subdirectories of <code class="docutils literal notranslate"><span class="pre">directories</span></code> are
+class labels and subdirectory contents are image data as NPY arrays.</li>
+<li><strong>convert</strong> – Convert label strings to integers (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>).</li>
+<li><strong>sample</strong> – Undersample image data per subdirectory (default: <code class="docutils literal notranslate"><span class="pre">None</span></code>).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">units)</span></code> where <code class="docutils literal notranslate"><span class="pre">x</span></code> is concatenated image data of shape
+<code class="docutils literal notranslate"><span class="pre">(N</span> <span class="pre">samples,</span> <span class="pre">row,</span> <span class="pre">col,</span> <span class="pre">channels)</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code> is a list of labels of length <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">samples</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">units</span></code> is the number of unique labels.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="model">
+<h2>Model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="deepometry.model.Model">
+<em class="property">class </em><code class="descclassname">deepometry.model.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>shape</em>, <em>units</em>, <em>directory=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepometry/model.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#deepometry.model.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a model for single-cell image classification.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>shape</strong> – Input image shape, including channels. Grayscale data should specify channels as 1. Check your
+keras configuration for channel order (e.g., <code class="docutils literal notranslate"><span class="pre">&quot;image_data_format&quot;:</span> <span class="pre">&quot;channels_last&quot;</span></code>). Usually,
+this configuration is defined at <code class="docutils literal notranslate"><span class="pre">$HOME/.keras/keras.json</span></code>, or <code class="docutils literal notranslate"><span class="pre">%USERPROFILE%\.keras\keras.json</span></code>
+on Windows.</li>
+<li><strong>units</strong> – Number of predictable classes.</li>
+<li><strong>directory</strong> – (Optional) Output directory for model checkpoints, metrics, and metadata. Otherwise, the
+package’s data directory is used.</li>
+<li><strong>name</strong> – (Optional) A unique identifier for referencing this model.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="deepometry.model.Model.compile">
+<code class="descname">compile</code><span class="sig-paren">(</span><em>lr=1e-05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepometry/model.html#Model.compile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#deepometry.model.Model.compile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="deepometry.model.Model.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>batch_size=32</em>, <em>verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepometry/model.html#Model.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#deepometry.model.Model.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the loss value &amp; metrics values for the model in test mode.</p>
+<p>Computation is done in batches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – NumPy array of test data.</li>
+<li><strong>y</strong> – NumPy array of target data.</li>
+<li><strong>batch_size</strong> – Number of samples evaluated per batch.</li>
+<li><strong>verbose</strong> – Verbosity mode, 0 = silent, or 1 = verbose.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Tuple of scalars: (loss, accuracy).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="deepometry.model.Model.extract">
+<code class="descname">extract</code><span class="sig-paren">(</span><em>x</em>, <em>batch_size=32</em>, <em>standardize=False</em>, <em>verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepometry/model.html#Model.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#deepometry.model.Model.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract learned features from the model.</p>
+<p>Computation is done in batches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – NumPy array of data.</li>
+<li><strong>batch_size</strong> – Number of samples evaluated per batch.</li>
+<li><strong>standardize</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, center to the mean and component wise scale to unit variance
+(default: <code class="docutils literal notranslate"><span class="pre">False</span></code>).</li>
+<li><strong>verbose</strong> – Verbosity mode, 0 = silent, or 1 = verbose.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">NumPy array of shape <code class="docutils literal notranslate"><span class="pre">(samples,</span> <span class="pre">features)</span></code>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="deepometry.model.Model.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>batch_size=32</em>, <em>class_weight='auto'</em>, <em>epochs=512</em>, <em>validation_split=0.2</em>, <em>verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepometry/model.html#Model.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#deepometry.model.Model.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train the model for a fixed number of epochs (iterations on a dataset). Training will automatically stop
+if the validation loss fails to improve for 20 epochs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> – NumPy array of training data.</li>
+<li><strong>y</strong> – NumPy array of target data.</li>
+<li><strong>batch_size</strong> – Number of samples per gradient update.</li>
+<li><strong>class_weight</strong> – Dictionary mapping labels to weights. Use <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> to automatically compute weights.
+Use <code class="docutils literal notranslate"><span class="pre">None</span></code> to ignore weights.</li>
+<li><strong>epochs</strong> – Number of times to iterate over the training data arrays.</li>
+<li><strong>validation_split</strong> – Fraction of the training data to be used as validation data.</li>
+<li><strong>verbose</strong> – Verbosity mode. 0 = silent, 1 = verbose, 2 = one log line per epoch.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="deepometry.model.Model.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>x</em>, <em>batch_size=32</em>, <em>verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepometry/model.html#Model.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#deepometry.model.Model.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make predictions for the input samples.</p>
+<p>Computation is done in batches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – NumPy array of input data.</li>
+<li><strong>batch_size</strong> – Number of samples predicted per batch.</li>
+<li><strong>verbose</strong> – Verbosity mode, 0 = silent, or 1 = verbose.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">NumPy array of predictions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-deepometry.visualize">
+<span id="visualization"></span><h2>Visualization<a class="headerlink" href="#module-deepometry.visualize" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="deepometry.visualize.images_to_sprite">
+<code class="descclassname">deepometry.visualize.</code><code class="descname">images_to_sprite</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepometry/visualize.html#images_to_sprite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#deepometry.visualize.images_to_sprite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the sprite image along with any necessary padding.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – NxHxW[x3] tensor containing the images.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Properly shaped HxWx3 image with any necessary padding.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="deepometry.visualize.make_projection">
+<code class="descclassname">deepometry.visualize.</code><code class="descname">make_projection</code><span class="sig-paren">(</span><em>features</em>, <em>metadata=None</em>, <em>log_directory=None</em>, <em>sprites=None</em>, <em>sprites_dim=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/deepometry/visualize.html#make_projection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#deepometry.visualize.make_projection" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>features</strong> – Embedded features TSV, one row per sample.</li>
+<li><strong>metadata</strong> – Additional fields (e.g., labels) corresponding to sample data,
+as a TSV. Single-column metadata should exclude column label. Multi-column
+metadata must include column labels.</li>
+<li><strong>log_directory</strong> – Output directory for visualized data.</li>
+<li><strong>sprites</strong> – Path to sprites image.</li>
+<li><strong>sprites_dim</strong> – Dimension <code class="docutils literal notranslate"><span class="pre">(sprites_dim,</span> <span class="pre">sprites_dim)</span></code> of a sprite.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Output directory for visualized data.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="examples/visualize.html" class="btn btn-neutral" title="Visualize" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Claire McQuin, Minh Doan.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
