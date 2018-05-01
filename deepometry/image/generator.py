@@ -1,10 +1,13 @@
 import keras.preprocessing.image
+import numpy
+import skimage.exposure
 
 import deepometry.image.iterator
 
 
 class ImageDataGenerator(keras.preprocessing.image.ImageDataGenerator):
     def __init__(self,
+                 gamma_adjust_range=0.0,
                  height_shift_range=0.0,
                  horizontal_flip=False,
                  preprocessing_function=None,
@@ -19,6 +22,8 @@ class ImageDataGenerator(keras.preprocessing.image.ImageDataGenerator):
             vertical_flip=vertical_flip,
             width_shift_range=width_shift_range
         )
+
+        self.gamma_adjust_range = gamma_adjust_range
 
     def flow(self, x,
              y=None,
@@ -51,3 +56,11 @@ class ImageDataGenerator(keras.preprocessing.image.ImageDataGenerator):
                             save_format="tif",
                             follow_links=False):
         raise NotImplementedError()
+
+    def random_transform(self, x, seed=None):
+        if self.gamma_adjust_range:
+            gamma = numpy.random.uniform(1.0 - self.gamma_adjust_range, 1.0 + self.gamma_adjust_range)
+            gamma = max(gamma, 0.0)
+            x = skimage.exposure.adjust_gamma(x, gamma=gamma)
+
+        return super(ImageDataGenerator, self).random_transform(x, seed)
